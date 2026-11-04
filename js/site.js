@@ -189,7 +189,7 @@
     return top;
   };
   // each value is set directly on the piece that moves: a variable on a big section makes the browser recheck all of it
-  const scrubTargets = { curtain: '.curtain-bg', book: '.book' };
+  const scrubTargets = { curtain: '.curtain-bg', book: '.logo-lockup' };
   const scrubbed = $$('[data-scrub]').map((element) => ({
     element,
     layer: scrubTargets[element.dataset.scrub] ? $(scrubTargets[element.dataset.scrub], element) : element,
@@ -372,7 +372,7 @@
   const stageWatcher = new IntersectionObserver((entries) => {
     entries.forEach((entry) => entry.target.classList.toggle('offstage', !entry.isIntersecting));
   });
-  $$('.hero, .ticker, .tour, .office, .students').forEach((section) => stageWatcher.observe(section));
+  $$('.hero, .ticker, .tour, .office, .students, .cta-panel').forEach((section) => stageWatcher.observe(section));
 
   /* ---------- Moving strip: repeated once so the loop is seamless ---------- */
   const ticker = $('#ticker-track');

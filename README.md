@@ -20,6 +20,7 @@ Then open <http://127.0.0.1:8137>. Opening `index.html` directly also works.
 | `css/site.css` | The design: colours and fonts are named at the top |
 | `js/site.js` | All the motion: scroll story, reveals, sparks, tabs, phone menu and video. The page still works without it |
 | `assets/img/` | Logos and screenshots (WebP, in two sizes each) |
+| `assets/img/logo/` | The real logo cut into layers for the closing animation. At rest they form the exact logo, so replace them if the logo changes |
 | `assets/video/bright-up-tour.mp4` | The 48-second tour, with sound |
 | `assets/fonts/` | Inter and Plus Jakarta Sans, served from this site |
 
