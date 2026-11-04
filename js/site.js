@@ -816,11 +816,19 @@
         stopAuto();
         selectTab(tab);
       }
+      const module = node.dataset.module && $(`#${node.dataset.module}`);
+      if (module) {
+        stopDockAuto();
+        selectModule(dockItems.indexOf(module));
+      }
     });
   });
   new IntersectionObserver(([entry]) => {
     orbitVisible = entry.isIntersecting;
-    if (orbitVisible) orbit.classList.add('go'); // the opening burst starts when it can be seen
+    if (orbitVisible && !orbit.classList.contains('go')) {
+      orbit.classList.add('go'); // the opening burst starts when it can be seen
+      window.setTimeout(() => orbit.classList.add('settled'), 2000); // and plays once, so the icons can be clicked as soon as a reader returns
+    }
   }, { threshold: 0.2 }).observe(orbit);
   window.setInterval(() => {
     if (orbitHeld || !orbitVisible || paused || calm() || document.hidden) return;

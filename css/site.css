@@ -578,7 +578,6 @@ p {
 .hero-tilt {
   position: relative;
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transform-style: preserve-3d;
   transition: transform 0.5s var(--ease);
 }
 
@@ -884,6 +883,13 @@ p {
 .js .orbit:not(.go) .orbit-node,
 .js .orbit:not(.go) .spoke {
   animation-play-state: paused;
+}
+
+.js .orbit.settled .orbit-rings,
+.js .orbit.settled .orbit-hub,
+.js .orbit.settled .orbit-node,
+.js .orbit.settled .spoke {
+  animation: none;
 }
 
 @container (max-width: 400px) {
