@@ -529,32 +529,10 @@ p {
   pointer-events: none;
 }
 
-.hero-rays {
-  position: absolute;
-  top: calc(var(--header-height) - 14px);
-  right: clamp(8px, 3vw, 56px);
-  width: clamp(110px, 13vw, 190px);
-  overflow: visible;
-}
-
-.rays path {
-  stroke-dasharray: 1;
-}
-
-.star-glow {
-  transform-origin: 200px 200px;
-  animation: glow 3.6s ease-in-out infinite alternate;
-}
-
-.star {
-  transform-origin: 200px 200px;
-  animation: twinkle 7s ease-in-out infinite alternate;
-}
-
 .hero-grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.22fr);
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr);
   gap: clamp(40px, 5vw, 72px);
   align-items: center;
 }
@@ -594,9 +572,7 @@ p {
 
 .hero-visual {
   position: relative;
-  margin-right: max(-9vw, -150px);
   perspective: 1500px;
-  transform-origin: 50% 0;
 }
 
 .hero-tilt {
@@ -604,6 +580,341 @@ p {
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transform-style: preserve-3d;
   transition: transform 0.5s var(--ease);
+}
+
+/* Hero orbit: the hub is the brand, the modules circle it, and the highlight moves between them */
+.orbit {
+  position: relative;
+  width: min(100%, 620px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+.orbit-glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(96 165 250 / 0.3), rgb(96 165 250 / 0));
+  animation: breathe 6s ease-in-out infinite alternate;
+}
+
+.orbit-rings,
+.orbit-rings svg,
+.orbit-spin {
+  position: absolute;
+  inset: 0;
+}
+
+.orbit-rings svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+}
+
+.ring-dashed {
+  stroke: rgb(255 255 255 / 0.28);
+  stroke-dasharray: 0.8 1.4;
+  stroke-width: 0.25;
+}
+
+.ring-solid {
+  stroke: rgb(255 255 255 / 0.12);
+  stroke-width: 0.3;
+}
+
+.ring-dots {
+  stroke: rgb(255 255 255 / 0.32);
+  stroke-dasharray: 0.4 2.2;
+  stroke-linecap: round;
+  stroke-width: 0.35;
+}
+
+.comet {
+  stroke-dasharray: 22 236;
+  stroke-linecap: round;
+  stroke-width: 0.9;
+}
+
+.comet-2 {
+  stroke: #93c5fd;
+  stroke-dasharray: 9 180;
+  stroke-linecap: round;
+  stroke-opacity: 0.75;
+  stroke-width: 0.7;
+}
+
+.js .ring-slow {
+  animation: spin 40s linear infinite reverse;
+}
+
+.js .ring-comet {
+  animation: spin 7s linear infinite;
+}
+
+.js .ring-comet-2 {
+  animation: spin 11s linear infinite reverse;
+}
+
+.js .orbit-spin {
+  animation: spin 80s linear infinite;
+}
+
+.js .orbit-upright {
+  animation: spin 80s linear infinite reverse;
+}
+
+.spoke {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 41%;
+  height: 1px;
+  background: rgb(255 255 255 / 0.13);
+  transform: rotate(calc(var(--i) * 45deg - 90deg));
+  transform-origin: 0 50%;
+  transition: background-color 0.5s ease;
+}
+
+.spoke.is-active {
+  background: var(--c);
+}
+
+.spoke i {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  opacity: 0;
+}
+
+.spoke i::before {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.js .spoke i {
+  animation: dotOut 2.6s ease-in-out calc(var(--i) * 0.33s + 1.2s) infinite;
+}
+
+.orbit-node {
+  position: absolute;
+  top: calc(var(--y) * 1%);
+  left: calc(var(--x) * 1%);
+  z-index: 1;
+  color: #fff;
+  text-decoration: none;
+  translate: -50% -50%;
+}
+
+.orbit-node.is-active {
+  z-index: 2;
+}
+
+.orbit-upright {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(3px, 1cqw, 7px);
+}
+
+.orbit-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(36px, 10cqw, 58px);
+  aspect-ratio: 1;
+  border-radius: 30%;
+  background: #fff;
+  box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.55);
+  color: var(--navy);
+  transition: background-color 0.45s ease, color 0.45s ease, box-shadow 0.45s ease, scale 0.6s cubic-bezier(0.34, 1.7, 0.64, 1);
+}
+
+.orbit-tile svg {
+  width: 46%;
+  height: 46%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.orbit-label {
+  padding: 2px clamp(5px, 1.2cqw, 9px);
+  border-radius: 6px;
+  background: rgb(0 26 77 / 0.72);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14);
+  color: #fff;
+  font-family: var(--display);
+  font-size: clamp(10.5px, 2.5cqw, 14px);
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background-color 0.45s ease, color 0.45s ease;
+}
+
+.orbit-node.is-active .orbit-tile {
+  background: var(--c);
+  box-shadow: 0 0 30px var(--c);
+  color: var(--on);
+  scale: 1.2;
+}
+
+.orbit-node.is-active .orbit-label {
+  background: #fff;
+  color: var(--navy);
+}
+
+.orbit-node.is-active .orbit-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--c);
+  animation: tilePing 1.4s ease-out infinite;
+}
+
+.orbit-hub {
+  position: absolute;
+  inset: 28.5%;
+  z-index: 3;
+}
+
+.hub-ring {
+  position: absolute;
+  inset: -5.5%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #fbb000, #ffd766 16%, rgb(255 215 102 / 0) 40%, rgb(37 99 235 / 0) 58%, #2563eb 84%, #fbb000);
+}
+
+.js .hub-ring {
+  animation: spin 9s linear infinite;
+}
+
+.hub-core {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 22%, #fff 0%, #fff 58%, #eef3ff 100%);
+  box-shadow: 0 24px 60px -18px rgb(0 0 0 / 0.6), inset 0 0 0 1px rgb(0 26 77 / 0.06);
+  color: var(--navy);
+  text-align: center;
+}
+
+.hub-mark {
+  width: 34%;
+  height: auto;
+}
+
+.hub-word {
+  width: 56%;
+  height: auto;
+  margin-top: 2%;
+}
+
+.hub-rule {
+  flex: none;
+  width: 22%;
+  height: 1px;
+  margin-block: 3.5%;
+  background: rgb(0 26 77 / 0.25);
+}
+
+.hub-swap {
+  display: grid;
+  gap: 1px;
+  min-height: 3em;
+  transition: opacity 0.2s ease, translate 0.2s ease;
+}
+
+.hub-swap.is-out {
+  opacity: 0;
+  translate: 0 -8px;
+}
+
+.hub-swap b {
+  font-family: var(--display);
+  font-size: clamp(9.5px, 2.2cqw, 13px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.hub-swap span {
+  color: var(--muted);
+  font-size: clamp(9px, 1.95cqw, 12px);
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+/* The start of the page: rings open, the hub lands, the modules burst out of it */
+.js .orbit-rings {
+  animation: ringsIn 1.2s var(--ease) 0.05s both;
+}
+
+.js .orbit-hub {
+  animation: hubIn 0.9s cubic-bezier(0.34, 1.5, 0.64, 1) 0.15s both;
+}
+
+.js .orbit-node {
+  animation: nodeBurst 1s cubic-bezier(0.34, 1.45, 0.64, 1) calc(var(--i) * 70ms + 0.35s) both;
+}
+
+.js .spoke {
+  animation: spokeIn 0.7s var(--ease) calc(var(--i) * 70ms + 0.4s) both;
+}
+
+.js .orbit:not(.go) .orbit-rings,
+.js .orbit:not(.go) .orbit-hub,
+.js .orbit:not(.go) .orbit-node,
+.js .orbit:not(.go) .spoke {
+  animation-play-state: paused;
+}
+
+@container (max-width: 400px) {
+  .hub-mark {
+    width: 32%;
+  }
+
+  .hub-word {
+    width: 60%;
+  }
+
+  .hub-rule,
+  .hub-swap span {
+    display: none;
+  }
+
+  .hub-swap {
+    min-height: 0;
+    margin-top: 4%;
+  }
+}
+
+@container (max-width: 300px) {
+  .hub-mark {
+    display: none;
+  }
+
+  .hub-word {
+    width: 66%;
+    margin: 0;
+  }
 }
 
 /* App window and phone frames */
@@ -641,14 +952,6 @@ p {
   white-space: nowrap;
 }
 
-.phone-wrap {
-  position: absolute;
-  bottom: clamp(-44px, -3vw, -24px);
-  left: clamp(-46px, -3vw, -14px);
-  width: 25%;
-  min-width: 96px;
-}
-
 .phone {
   padding: clamp(4px, 0.5vw, 7px);
   border-radius: clamp(20px, 2.2vw, 30px);
@@ -662,54 +965,6 @@ p {
 }
 
 /* Small floating labels around the hero */
-.chip {
-  position: absolute;
-  z-index: 2;
-}
-
-.chip-float {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 16px 34px -12px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(0 26 77 / 0.06);
-  color: var(--ink);
-  font-size: clamp(0.72rem, 0.68rem + 0.2vw, 0.84rem);
-  font-weight: 600;
-  white-space: nowrap;
-  animation: float 5.5s ease-in-out infinite alternate;
-}
-
-.chip-float.mono {
-  font-family: var(--mono);
-  font-weight: 500;
-}
-
-.chip-a {
-  top: 14%;
-  left: clamp(-34px, -2vw, -10px);
-}
-
-.chip-a .chip-float {
-  animation-delay: -1.2s;
-}
-
-.chip-b {
-  top: -18px;
-  right: calc(max(9vw, 0px) + 40px);
-}
-
-.chip-b .chip-float {
-  animation-delay: -3s;
-}
-
-.chip-c {
-  bottom: -20px;
-  right: calc(max(9vw, 0px) + 72px);
-}
-
 .dot {
   flex: none;
   display: inline-block;
@@ -1967,10 +2222,14 @@ p {
 }
 
 .motion-paused .aurora i,
-.motion-paused .star,
-.motion-paused .star-glow,
+.motion-paused .orbit-glow,
+.motion-paused .ring-spin,
+.motion-paused .orbit-spin,
+.motion-paused .orbit-upright,
+.motion-paused .spoke i,
+.motion-paused .hub-ring,
+.motion-paused .orbit-tile::after,
 .motion-paused .ticker-track,
-.motion-paused .chip-float,
 .motion-paused .ping,
 .motion-paused .stage-glow,
 .motion-paused .logo-glow,
@@ -1982,9 +2241,13 @@ p {
 }
 
 .offstage .aurora i,
-.offstage .star,
-.offstage .star-glow,
-.offstage .chip-float,
+.offstage .orbit-glow,
+.offstage .ring-spin,
+.offstage .orbit-spin,
+.offstage .orbit-upright,
+.offstage .spoke i,
+.offstage .hub-ring,
+.offstage .orbit-tile::after,
 .offstage .ping,
 .offstage .stage-glow,
 .offstage .logo-glow,
@@ -1995,37 +2258,16 @@ p {
   animation-play-state: paused !important;
 }
 
+.hero.offstage .orbit > *,
+.students.offstage .stage-glow,
+.tour.offstage .curtain-bg .aurora,
+.office.offstage .curtain-bg .aurora {
+  display: none;
+}
+
 /* Entrance animations */
 .js .hero-in {
   animation: rise 1s var(--ease) var(--d, 0s) both;
-}
-
-.js .hero-window {
-  animation: heroWindow 1.3s var(--ease) 0.2s both;
-}
-
-.js .phone-wrap .phone {
-  animation: phoneIn 1.2s var(--ease) 0.55s both;
-}
-
-.js .chip-a {
-  animation: chipIn 0.8s var(--ease) 1.05s both;
-}
-
-.js .chip-b {
-  animation: chipIn 0.8s var(--ease) 1.25s both;
-}
-
-.js .chip-c {
-  animation: chipIn 0.8s var(--ease) 1.45s both;
-}
-
-.js .rays path {
-  animation: drawLine 1s var(--ease) 0.7s both;
-}
-
-.js .hero-rays {
-  animation: chipIn 1s var(--ease) 0.45s both;
 }
 
 .js .gold {
@@ -2069,6 +2311,11 @@ p {
 
 .js [data-reveal].in:not(.done) {
   transition: opacity 0.9s ease var(--d, 0s), transform 1s var(--ease) var(--d, 0s);
+}
+
+.orbit.hold .orbit-spin,
+.orbit.hold .orbit-upright {
+  animation-play-state: paused;
 }
 
 /* Effects for a real mouse only: never on touch screens */
@@ -2148,31 +2395,6 @@ p {
     gap: clamp(50px, 8vw, 64px);
   }
 
-  .hero-visual {
-    width: min(100%, 860px);
-    margin-right: 0;
-    margin-left: auto;
-    padding-left: clamp(14px, 4vw, 40px);
-  }
-
-  .phone-wrap {
-    left: 0;
-  }
-
-  .chip-a {
-    top: -30px;
-    left: clamp(20px, 6vw, 60px);
-  }
-
-  .chip-b {
-    top: -30px;
-    right: 18px;
-  }
-
-  .chip-c {
-    right: 16px;
-  }
-
   .step {
     max-width: 820px;
     margin-inline: auto;
@@ -2216,20 +2438,8 @@ p {
     display: inline;
   }
 
-  .hero-rays {
-    display: none;
-  }
-
   .hero-actions .btn {
     flex: 1 1 100%;
-  }
-
-  .chip-b {
-    display: none;
-  }
-
-  .chip-float {
-    padding: 7px 11px;
   }
 
   .att {
@@ -2264,10 +2474,6 @@ p {
 /* Very small phones: the menu holds the invitation button, so the header only needs the logo and menu */
 @media (max-width: 360px) {
   .header-actions .btn-small {
-    display: none;
-  }
-
-  .chip-c {
     display: none;
   }
 
@@ -2312,22 +2518,75 @@ p {
     font-size: clamp(4.5rem, 3.6vw, 5.6rem);
   }
 
-  .hero-visual {
-    margin-right: 0;
-  }
-
-  .hero-rays {
-    right: max(40px, calc((100vw - 1640px) / 2 - 130px));
+  .orbit {
+    width: min(100%, 760px);
   }
 
   .chip-b,
-  .chip-c {
-    right: 60px;
-  }
-
   .story.pinned .step {
     min-height: 74vh;
     min-height: 74svh;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes dotOut {
+  0% {
+    opacity: 0;
+    transform: translateX(34%);
+  }
+  25% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes tilePing {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes ringsIn {
+  from {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+}
+
+@keyframes hubIn {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+@keyframes nodeBurst {
+  from {
+    opacity: 0;
+    transform: translate(calc((50 - var(--x)) * 1cqw), calc((50 - var(--y)) * 1cqw)) scale(0.2);
+  }
+}
+
+@keyframes spokeIn {
+  from {
+    transform: rotate(calc(var(--i) * 45deg - 90deg)) scaleX(0);
   }
 }
 
@@ -2666,11 +2925,11 @@ p {
     translate: 0 0;
   }
 
-  .caret {
-    display: none;
-  }
-
-  .tab-progress {
+  .caret,
+  .tab-progress,
+  .spoke i,
+  .ring-comet,
+  .ring-comet-2 {
     display: none;
   }
 }

@@ -16,14 +16,13 @@
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/plus-jakarta-sans-latin-wght-normal.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/inter-latin-wght-normal.woff2">
-  <link rel="preload" as="image" type="image/webp" href="assets/img/mentor-dashboard-1600.webp" imagesrcset="assets/img/mentor-dashboard-960.webp 960w, assets/img/mentor-dashboard-1600.webp 1600w" imagesizes="(min-width: 1040px) 60vw, 100vw">
-  <link rel="stylesheet" href="css/site.css?v=4">
+  <link rel="stylesheet" href="css/site.css?v=7">
   <script>
     document.documentElement.classList.add('js');
     // If the script can't load, show everything rather than leaving animated content hidden.
     setTimeout(function () { if (!window.brightUpReady) document.documentElement.classList.remove('js'); }, 3500);
   </script>
-  <script src="js/site.js?v=4" defer></script>
+  <script src="js/site.js?v=7" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -72,14 +71,6 @@
     <section class="hero" id="top">
       <div class="aurora" aria-hidden="true"><i></i><i></i></div>
       <canvas class="sparks" data-sparks aria-hidden="true"></canvas>
-      <svg class="hero-rays" viewBox="0 0 400 400" aria-hidden="true">
-        <g class="rays" fill="none" stroke="#FBB000" stroke-width="2.5" stroke-linecap="round">
-          <path pathLength="1" d="M200 130V70"/><path pathLength="1" d="m250 144 24-50"/><path pathLength="1" d="m150 144-24-50"/><path pathLength="1" d="m288 182 52-26"/><path pathLength="1" d="m112 182-52-26"/>
-        </g>
-        <circle class="star-glow" cx="200" cy="200" r="86" fill="url(#star-glow)"/>
-        <path class="star" fill="#FBB000" d="M200 150c3 30 20 47 50 50-30 3-47 20-50 50-3-30-20-47-50-50 30-3 47-20 50-50Z"/>
-        <defs><radialGradient id="star-glow"><stop offset="0" stop-color="#FBB000" stop-opacity=".42"/><stop offset="1" stop-color="#FBB000" stop-opacity="0"/></radialGradient></defs>
-      </svg>
       <div class="container hero-grid">
         <div class="hero-copy">
           <p class="eyebrow eyebrow-gold hero-in" style="--d: .02s">Unlock potential</p>
@@ -96,18 +87,58 @@
         </div>
         <div class="hero-visual" data-scrub="hero-visual">
           <div class="hero-tilt" id="hero-tilt">
-            <div class="window hero-window">
-              <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/dashboard</span></div>
-              <img src="assets/img/mentor-dashboard-1600.webp" srcset="assets/img/mentor-dashboard-960.webp 960w, assets/img/mentor-dashboard-1600.webp 1600w" sizes="(min-width: 1040px) 60vw, 100vw" width="1600" height="1000" fetchpriority="high" alt="A mentor's dashboard in Bright Up, with totals for students, batches and fees, and charts of enrolments and batches.">
-            </div>
-            <div class="phone-wrap" data-parallax="-0.07">
-              <div class="phone">
-                <img src="assets/img/me-phone-360.webp" srcset="assets/img/me-phone-360.webp 360w, assets/img/me-phone-640.webp 640w" sizes="220px" width="360" height="738" alt="A student's My Learning page on a phone, showing the next class and what needs attention.">
+            <nav class="orbit" id="orbit" aria-label="What's inside Bright Up">
+              <span class="orbit-glow" aria-hidden="true"></span>
+              <div class="orbit-rings" aria-hidden="true">
+                <svg viewBox="0 0 100 100"><circle class="ring-dashed" cx="50" cy="50" r="41"/><circle class="ring-solid" cx="50" cy="50" r="29"/></svg>
+                <svg class="ring-spin ring-slow" viewBox="0 0 100 100"><circle class="ring-dots" cx="50" cy="50" r="35"/></svg>
+                <svg class="ring-spin ring-comet" viewBox="0 0 100 100"><defs><linearGradient id="orbit-comet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbb000" stop-opacity="0"/><stop offset="1" stop-color="#fbb000"/></linearGradient></defs><circle class="comet" cx="50" cy="50" r="41" stroke="url(#orbit-comet)"/></svg>
+                <svg class="ring-spin ring-comet-2" viewBox="0 0 100 100"><circle class="comet-2" cx="50" cy="50" r="29"/></svg>
               </div>
-            </div>
-            <div class="chip chip-a" data-parallax="-0.13" aria-hidden="true"><span class="chip-float"><b class="dot dot-green"></b>Attendance recorded</span></div>
-            <div class="chip chip-b" data-parallax="-0.04" aria-hidden="true"><span class="chip-float"><svg viewBox="0 0 24 24" width="15" height="15"><path fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></svg>Looks good</span></div>
-            <div class="chip chip-c" data-parallax="-0.1" aria-hidden="true"><span class="chip-float mono"><b class="dot dot-gold"></b>Class average: 83</span></div>
+              <div class="orbit-spin">
+                <span class="spoke is-active" style="--i: 0; --c: #2563eb" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 1; --c: #16a34a" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 2; --c: #fbb000" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 3; --c: #7c3aed" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 4; --c: #0891b2" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 5; --c: #f97316" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 6; --c: #00a79d" aria-hidden="true"><i></i></span>
+                <span class="spoke" style="--i: 7; --c: #ec4899" aria-hidden="true"><i></i></span>
+                <a class="orbit-node is-active" href="#students" style="--i: 0; --x: 50.0; --y: 9.0; --c: #2563eb; --on: #fff" data-note="Join Google Meet in one click" aria-label="Live classes: Join Google Meet in one click">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" /> <rect x="2" y="6" width="14" height="12" rx="2" /></svg></span><span class="orbit-label">Live classes</span></span>
+                </a>
+                <a class="orbit-node" href="#mentors" style="--i: 1; --x: 78.99; --y: 21.01; --c: #16a34a; --on: #fff" data-note="Recorded when students join" aria-label="Attendance: Recorded when students join">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /></svg></span><span class="orbit-label">Attendance</span></span>
+                </a>
+                <a class="orbit-node" href="#students" style="--i: 2; --x: 91.0; --y: 50.0; --c: #fbb000; --on: #001a4d" data-note="280 Python programs" aria-label="Practice: 280 Python programs">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="3" /> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /> <circle cx="18" cy="5" r="3" /></svg></span><span class="orbit-label">Practice</span></span>
+                </a>
+                <a class="orbit-node" href="#students" style="--i: 3; --x: 78.99; --y: 78.99; --c: #7c3aed; --on: #fff" data-note="Run code in your browser" aria-label="Playground: Run code in your browser">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 16 4-4-4-4" /> <path d="m6 8-4 4 4 4" /> <path d="m14.5 4-5 16" /></svg></span><span class="orbit-label">Playground</span></span>
+                </a>
+                <a class="orbit-node" href="#mentors" style="--i: 4; --x: 50.0; --y: 91.0; --c: #0891b2; --on: #fff" data-note="Mentor reviews beside your code" aria-label="Assignments: Mentor reviews beside your code">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="M12 11h4" /> <path d="M12 16h4" /> <path d="M8 11h.01" /> <path d="M8 16h.01" /></svg></span><span class="orbit-label">Assignments</span></span>
+                </a>
+                <a class="orbit-node" href="#students" style="--i: 5; --x: 21.01; --y: 78.99; --c: #f97316; --on: #fff" data-note="Jobs and journeys, shared" aria-label="Careers: Jobs and journeys, shared">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> <rect width="20" height="14" x="2" y="6" rx="2" /></svg></span><span class="orbit-label">Careers</span></span>
+                </a>
+                <a class="orbit-node" href="#office" data-tab="tab-fees" style="--i: 6; --x: 9.0; --y: 50.0; --c: #00a79d; --on: #fff" data-note="UPI, confirmed on a ledger" aria-label="Fees: UPI, confirmed on a ledger">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg></span><span class="orbit-label">Fees</span></span>
+                </a>
+                <a class="orbit-node" href="#office" data-tab="tab-enquiries" style="--i: 7; --x: 21.01; --y: 21.01; --c: #ec4899; --on: #fff" data-note="Every lead on a timeline" aria-label="Enquiries: Every lead on a timeline">
+                  <span class="orbit-upright"><span class="orbit-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2a9 9 0 0 1 9 9" /> <path d="M13 6a5 5 0 0 1 5 5" /> <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg></span><span class="orbit-label">Enquiries</span></span>
+                </a>
+              </div>
+              <div class="orbit-hub" aria-hidden="true">
+                <span class="hub-ring"></span>
+                <div class="hub-core">
+                  <img class="hub-mark" src="assets/img/brightup-icon-colour.png" width="256" height="190" alt="">
+                  <img class="hub-word" src="assets/img/brightup-wordmark.png" width="720" height="212" alt="">
+                  <span class="hub-rule"></span>
+                  <div class="hub-swap" id="hub-swap"><b id="hub-name">Live classes</b><span id="hub-note">Join Google Meet in one click</span></div>
+                </div>
+              </div>
+            </nav>
           </div>
         </div>
       </div>

@@ -198,7 +198,6 @@
     top: 0,
     height: 0,
   }));
-  const parallax = $$('[data-parallax]').map((element) => ({ element, speed: Number(element.dataset.parallax), top: 0, height: 0 }));
   const rail = $('#story-rail-fill');
   const stepsColumn = $('.story-steps');
   let docHeight = 0;
@@ -207,7 +206,7 @@
 
   const measure = () => {
     docHeight = document.documentElement.scrollHeight;
-    for (const item of [...scrubbed, ...parallax]) {
+    for (const item of scrubbed) {
       item.top = docTop(item.element);
       item.height = item.element.offsetHeight;
     }
@@ -233,7 +232,7 @@
 
   const apply = (item) => {
     const { layer, type, value } = item;
-    if (type === 'hero-visual') layer.style.transform = `rotateX(${(value * 9).toFixed(2)}deg) scale(${(1 - value * 0.06).toFixed(4)})`;
+    if (type === 'hero-visual') layer.style.transform = `scale(${(1 - value * 0.14).toFixed(4)})`;
     if (type === 'curtain') layer.style.transform = `scaleX(${(1 - (1 - value) * 0.07).toFixed(4)})`;
     if (type === 'video') layer.style.scale = (0.86 + 0.14 * value).toFixed(4);
     if (type === 'book') {
@@ -258,10 +257,6 @@
       if (Math.abs(target - item.value) < 0.0008) item.value = target;
       else settling = true;
       apply(item);
-    }
-    for (const item of parallax) {
-      const distance = item.top + item.height / 2 - (y + vh / 2);
-      if (Math.abs(distance) < vh * 1.6) item.element.style.translate = `0 ${(distance * item.speed).toFixed(1)}px`;
     }
     if (rail && pinned) rail.style.transform = `scaleY(${clamp((y + vh * 0.5 - railTop) / railHeight).toFixed(4)})`;
     if (settling) requestTick();
@@ -565,6 +560,71 @@
   selectTab(tabs[0]);
   syncAutoTabs();
 
+  /* ---------- Hero orbit: the highlight moves between the modules; hovering one pauses it there ---------- */
+  const orbit = $('#orbit');
+  const orbitNodes = $$('.orbit-node', orbit);
+  const orbitSpokes = $$('.spoke', orbit);
+  const hubSwap = $('#hub-swap');
+  const hubName = $('#hub-name');
+  const hubNote = $('#hub-note');
+  let orbitIndex = 0;
+  let orbitHeld = false;
+  let orbitVisible = true;
+  let hubTimer = 0;
+
+  const showModule = (index) => {
+    if (index === orbitIndex) return;
+    orbitIndex = index;
+    orbitNodes.forEach((node, i) => node.classList.toggle('is-active', i === index));
+    orbitSpokes.forEach((spoke, i) => spoke.classList.toggle('is-active', i === index));
+    const node = orbitNodes[index];
+    const write = () => {
+      hubName.textContent = $('.orbit-label', node).textContent;
+      hubNote.textContent = node.dataset.note;
+      hubSwap.classList.remove('is-out');
+    };
+    window.clearTimeout(hubTimer);
+    if (calm()) {
+      write();
+      return;
+    }
+    hubSwap.classList.add('is-out');
+    hubTimer = window.setTimeout(write, 200);
+  };
+
+  const holdOrbit = (held) => {
+    orbitHeld = held;
+    orbit.classList.toggle('hold', held);
+  };
+  orbitNodes.forEach((node, index) => {
+    node.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      holdOrbit(true);
+      showModule(index);
+    });
+    node.addEventListener('pointerleave', () => holdOrbit(false));
+    node.addEventListener('focus', () => {
+      holdOrbit(true);
+      showModule(index);
+    });
+    node.addEventListener('blur', () => holdOrbit(false));
+    node.addEventListener('click', () => {
+      const tab = node.dataset.tab && $(`#${node.dataset.tab}`);
+      if (tab) {
+        stopAuto();
+        selectTab(tab);
+      }
+    });
+  });
+  new IntersectionObserver(([entry]) => {
+    orbitVisible = entry.isIntersecting;
+    if (orbitVisible) orbit.classList.add('go'); // the opening burst starts when it can be seen
+  }, { threshold: 0.2 }).observe(orbit);
+  window.setInterval(() => {
+    if (orbitHeld || !orbitVisible || paused || calm() || document.hidden) return;
+    showModule((orbitIndex + 1) % orbitNodes.length);
+  }, 2300);
+
   /* ---------- Tour video ---------- */
   const video = $('#tour-video');
   const videoFrame = $('#tour-frame');
@@ -623,9 +683,10 @@
       button.style.setProperty('--ty', `${((y - box.top - box.height / 2) * 0.28).toFixed(1)}px`);
     }
 
-    if (y < heroSection.offsetHeight - window.scrollY) {
-      heroTilt.style.setProperty('--ry', `${((x / window.innerWidth - 0.5) * 7).toFixed(2)}deg`);
-      heroTilt.style.setProperty('--rx', `${((0.5 - y / window.innerHeight) * 5).toFixed(2)}deg`);
+    // the orbit leans gently toward the pointer, but holds still on a module so it can't slip away from it
+    if (y < heroSection.offsetHeight - window.scrollY && !target.closest('.orbit-node')) {
+      heroTilt.style.setProperty('--ry', `${((x / window.innerWidth - 0.5) * 5).toFixed(2)}deg`);
+      heroTilt.style.setProperty('--rx', `${((0.5 - y / window.innerHeight) * 4).toFixed(2)}deg`);
     }
   };
 
