@@ -725,8 +725,8 @@
   pauseListeners.push(syncDock);
 
   // the swell: each icon grows with its closeness to the pointer
-  const SWELL = 0.72;
-  const REACH = 92;
+  const SWELL = 0.3;
+  const REACH = 62;
   let dockPointer = null;
   let dockQueued = false;
   const swell = () => {
