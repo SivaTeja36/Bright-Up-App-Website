@@ -367,7 +367,7 @@
   const stageWatcher = new IntersectionObserver((entries) => {
     entries.forEach((entry) => entry.target.classList.toggle('offstage', !entry.isIntersecting));
   });
-  $$('.hero, .ticker, .tour, .office, .students, .cta-panel').forEach((section) => stageWatcher.observe(section));
+  $$('.hero, .ticker, .tour, .office, .students, .skills, .cta-panel').forEach((section) => stageWatcher.observe(section));
 
   /* ---------- Moving strip: repeated once so the loop is seamless ---------- */
   const ticker = $('#ticker-track');
@@ -559,6 +559,208 @@
   pauseListeners.push(syncAutoTabs);
   selectTab(tabs[0]);
   syncAutoTabs();
+
+  /* ---------- Skills: drifting pills and the panel they fill ---------- */
+  const skillData = JSON.parse($('#skills-data').textContent);
+  const pillsRoot = $('#pills');
+  const spotlight = $('#spotlight');
+  const iconsByArea = skillData.areas.map((_, i) => $(`.pill[data-area="${i}"] svg`).cloneNode(true));
+  let areaIndex = 0;
+  let areaChosen = false;
+
+  if (!calm()) {
+    // each row is repeated so its first half always spans the screen, however wide it is
+    $$('.pills-track', pillsRoot).forEach((track) => {
+      const originals = [...track.children];
+      for (let copy = 0; copy < 3; copy += 1) {
+        originals.forEach((item) => {
+          const clone = item.cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          $('button', clone).tabIndex = -1;
+          track.append(clone);
+        });
+      }
+    });
+  }
+
+  const showArea = (index) => {
+    areaIndex = index;
+    const area = skillData.areas[index];
+    $$('.pill', pillsRoot).forEach((pill) => {
+      const active = Number(pill.dataset.area) === index;
+      pill.classList.toggle('is-active', active);
+      pill.setAttribute('aria-pressed', String(active));
+    });
+    spotlight.style.setProperty('--c', area.c);
+    spotlight.style.setProperty('--on', area.on);
+    $('#spot-tile').replaceChildren(iconsByArea[index].cloneNode(true));
+    $('#spot-name').textContent = area.name;
+    $('#spot-count').textContent = area.count;
+    $('#spot-share').textContent = `${area.count} of ${skillData.total} in the catalogue`;
+    $('#spot-bar').style.setProperty('--share', (area.count / skillData.total).toFixed(4));
+    $('#spot-skill').textContent = area.starter;
+    $('#spot-more').textContent = area.more ? `+${area.more} more topics` : '';
+    const fill = (list, values) => list.replaceChildren(...values.map((value, i) => {
+      const item = document.createElement('li');
+      item.textContent = value;
+      item.style.setProperty('--i', i);
+      return item;
+    }));
+    fill($('#spot-chips'), area.skills);
+    fill($('#spot-topics'), area.topics);
+    spotlight.classList.remove('swap');
+    void spotlight.offsetWidth;
+    spotlight.classList.add('swap');
+  };
+
+  pillsRoot.addEventListener('click', (event) => {
+    const pill = event.target.closest('.pill');
+    if (!pill) return;
+    areaChosen = true;
+    showArea(Number(pill.dataset.area));
+  });
+  const holdPills = (held) => pillsRoot.classList.toggle('hold', held);
+  pillsRoot.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') holdPills(true); });
+  pillsRoot.addEventListener('pointerleave', () => holdPills(false));
+  pillsRoot.addEventListener('focusin', () => holdPills(true));
+  pillsRoot.addEventListener('focusout', () => holdPills(false));
+
+  let spotlightVisible = false;
+  new IntersectionObserver(([entry]) => { spotlightVisible = entry.isIntersecting; }, { threshold: 0.35 }).observe(spotlight);
+  const autoAreas = window.matchMedia('(min-width: 1040px)'); // small screens stack, so the panel only changes on a tap
+  window.setInterval(() => {
+    if (areaChosen || !spotlightVisible || paused || calm() || document.hidden || !autoAreas.matches) return;
+    if (pillsRoot.classList.contains('hold') || spotlight.matches(':hover')) return;
+    showArea((areaIndex + 1) % skillData.areas.length);
+  }, 4600);
+
+  /* ---------- Dock: icons swell under the pointer, and each opens its module's real screen ---------- */
+  const dock = $('#dock');
+  const dockItems = $$('.dock-item', dock);
+  const moduleMedia = $('#module-media');
+  const moduleCopy = $('#module-copy');
+  const modulePanel = $('#module-panel');
+  let moduleIndex = 0;
+  let moduleChosen = false;
+
+  const moduleImage = (item) => {
+    const image = new Image();
+    const name = item.dataset.img;
+    image.srcset = `assets/img/modules/${name}-900.webp 900w, assets/img/modules/${name}-1600.webp 1600w`;
+    image.sizes = '(min-width: 1040px) 60vw, 100vw';
+    image.src = `assets/img/modules/${name}-1600.webp`;
+    image.alt = item.dataset.alt;
+    return image;
+  };
+
+  let moduleRequest = 0;
+  const selectModule = (index, { focus = false } = {}) => {
+    moduleIndex = index;
+    const item = dockItems[index];
+    dockItems.forEach((other, i) => {
+      other.setAttribute('aria-selected', String(i === index));
+      other.tabIndex = i === index ? 0 : -1;
+    });
+    modulePanel.setAttribute('aria-labelledby', item.id);
+    $('#module-title').textContent = item.dataset.title;
+    $('#module-text').textContent = item.dataset.text;
+    $('#module-url').textContent = `brightup-learn.netlify.app/${item.dataset.url}`;
+    const tile = $('#module-tile');
+    tile.style.setProperty('--g1', item.style.getPropertyValue('--g1'));
+    tile.style.setProperty('--g2', item.style.getPropertyValue('--g2'));
+    tile.replaceChildren($('svg', item).cloneNode(true));
+    moduleCopy.classList.remove('swap');
+    void moduleCopy.offsetWidth;
+    moduleCopy.classList.add('swap');
+
+    // the new screen only appears once it's ready, so the window never flashes empty
+    moduleRequest += 1;
+    const request = moduleRequest;
+    const image = moduleImage(item);
+    const place = () => {
+      if (request !== moduleRequest) return;
+      image.classList.add('is-new');
+      moduleMedia.append(image);
+      const previous = [...moduleMedia.children].slice(0, -1);
+      window.setTimeout(() => previous.forEach((old) => old.remove()), 800);
+    };
+    image.decode().then(place, place);
+    moduleImage(dockItems[(index + 1) % dockItems.length]); // the next screen is ready ahead of time
+
+    if (dock.scrollWidth > dock.clientWidth) {
+      dock.scrollTo({ left: item.offsetLeft - (dock.clientWidth - item.offsetWidth) / 2, behavior: calm() ? 'auto' : 'smooth' });
+    }
+    if (focus) item.focus({ preventScroll: true });
+  };
+
+  const stopDockAuto = () => {
+    moduleChosen = true;
+    syncDock();
+  };
+  let dockVisible = false;
+  const syncDock = () => {
+    dock.classList.toggle('auto', !moduleChosen && !calm() && !paused);
+    dock.classList.toggle('holding', !dockVisible || dock.matches(':hover') || dock.contains(document.activeElement));
+  };
+  dockItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      stopDockAuto();
+      selectModule(index);
+    });
+    item.addEventListener('keydown', (event) => {
+      const moves = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: dockItems.length - 1 };
+      if (!(event.key in moves)) return;
+      event.preventDefault();
+      stopDockAuto();
+      selectModule((moves[event.key] + dockItems.length) % dockItems.length, { focus: true });
+    });
+    $('.dock-mark b', item).addEventListener('animationend', () => {
+      if (dock.classList.contains('auto')) selectModule((index + 1) % dockItems.length);
+    });
+  });
+  new IntersectionObserver(([entry]) => {
+    dockVisible = entry.isIntersecting;
+    syncDock();
+  }, { threshold: 0.3 }).observe(modulePanel);
+  pauseListeners.push(syncDock);
+
+  // the swell: each icon grows with its closeness to the pointer
+  const SWELL = 0.72;
+  const REACH = 92;
+  let dockPointer = null;
+  let dockQueued = false;
+  const swell = () => {
+    dockQueued = false;
+    dockItems.forEach((item) => {
+      if (dockPointer === null) {
+        item.style.removeProperty('--s');
+        return;
+      }
+      const box = item.getBoundingClientRect();
+      const distance = dockPointer - (box.left + box.width / 2);
+      item.style.setProperty('--s', (1 + SWELL * Math.exp(-(distance * distance) / (2 * REACH * REACH))).toFixed(3));
+    });
+  };
+  const queueSwell = () => {
+    if (dockQueued) return;
+    dockQueued = true;
+    requestAnimationFrame(swell);
+  };
+  const dockRoomy = window.matchMedia('(min-width: 1040px) and (hover: hover) and (pointer: fine)');
+  dock.addEventListener('pointermove', (event) => {
+    if (calm() || !dockRoomy.matches || event.pointerType !== 'mouse') return;
+    dockPointer = event.clientX;
+    queueSwell();
+    syncDock();
+  }, { passive: true });
+  dock.addEventListener('pointerleave', () => {
+    dockPointer = null;
+    queueSwell();
+    window.requestAnimationFrame(syncDock);
+  });
+  dock.addEventListener('focusin', syncDock);
+  dock.addEventListener('focusout', () => window.requestAnimationFrame(syncDock));
+  syncDock();
 
   /* ---------- Hero orbit: the highlight moves between the modules; hovering one pauses it there ---------- */
   const orbit = $('#orbit');

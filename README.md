@@ -20,6 +20,7 @@ Then open <http://127.0.0.1:8137>. Opening `index.html` directly also works.
 | `css/site.css` | The design: colours and fonts are named at the top |
 | `js/site.js` | All the motion: hero orbit, scroll story, reveals, sparks, tabs, phone menu and video. The page still works without it |
 | `assets/img/` | Logos and screenshots (WebP, in two sizes each) |
+| `assets/img/modules/` | The real screen for each icon in the dock |
 | `assets/img/logo/` | The real logo cut into layers for the closing animation. At rest they form the exact logo, so replace them if the logo changes |
 | `assets/video/bright-up-tour.mp4` | The 48-second tour, with sound |
 | `assets/fonts/` | Inter and Plus Jakarta Sans, served from this site |
@@ -35,7 +36,7 @@ Then open <http://127.0.0.1:8137>. Opening `index.html` directly also works.
 
 Every claim on the page comes from the real product, and the screens are the real app running on
 fictional sample data. Check the page when the app changes. For example, the Playground's languages and
-the Python track's numbers (280 programs, 195 quiz questions, 13 topics) are stated in the copy. The page
+the Python track's numbers (280 programs, 195 quiz questions, 13 topics) and the skills catalogue (384 skills in 13 areas, with the data inside `index.html`) are stated in the copy. The page
 has no invented statistics, customers or testimonials, and shouldn't gain any.
 
 ## Motion
