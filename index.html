@@ -2,7 +2,7 @@
 <html lang="en-IN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Bright Up | One bright place to learn, teach and run your institute</title>
   <meta name="description" content="Classes, coding practice, assignments, fees, attendance and enquiries in one app. Bright Up keeps students on track and gives mentors and the office a clear view of everything.">
   <meta name="theme-color" content="#001A4D">
@@ -16,12 +16,18 @@
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/plus-jakarta-sans-latin-wght-normal.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/inter-latin-wght-normal.woff2">
-  <link rel="stylesheet" href="css/site.css">
-  <script>document.documentElement.classList.add('js');</script>
-  <script src="js/site.js" defer></script>
+  <link rel="preload" as="image" type="image/webp" href="assets/img/mentor-dashboard-1600.webp" imagesrcset="assets/img/mentor-dashboard-960.webp 960w, assets/img/mentor-dashboard-1600.webp 1600w" imagesizes="(min-width: 1040px) 60vw, 100vw">
+  <link rel="stylesheet" href="css/site.css?v=3">
+  <script>
+    document.documentElement.classList.add('js');
+    // If the script can't load, show everything rather than leaving animated content hidden.
+    setTimeout(function () { if (!window.brightUpReady) document.documentElement.classList.remove('js'); }, 3500);
+  </script>
+  <script src="js/site.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress"></span></div>
 
   <header class="site-header" id="site-header">
     <div class="container header-row">
@@ -29,85 +35,133 @@
         <img class="logo-on-dark" src="assets/img/brightup-wordmark-dark.png" alt="" width="180" height="48">
         <img class="logo-on-light" src="assets/img/brightup-wordmark.png" alt="" width="180" height="48">
       </a>
-      <nav class="nav-links" aria-label="Main">
+      <nav class="nav-links" id="nav-links" aria-label="Main">
         <a href="#tour">Tour</a>
         <a href="#students">Students</a>
         <a href="#mentors">Mentors</a>
         <a href="#office">The office</a>
         <a href="#more">More</a>
+        <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
       </nav>
       <div class="header-actions">
         <a class="nav-signin" href="https://brightup-learn.netlify.app/login">Sign in</a>
-        <a class="btn btn-gold btn-small" href="mailto:brightup.learn@gmail.com?subject=Bright%20Up%20invitation%20request"><span class="label-long">Request an invitation</span><span class="label-short">Get invited</span></a>
+        <a class="btn btn-gold btn-small" data-magnetic href="mailto:brightup.learn@gmail.com?subject=Bright%20Up%20invitation%20request"><span class="label-long">Request an invitation</span><span class="label-short">Get invited</span></a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
 
+  <div class="mobile-menu" id="mobile-menu" aria-label="Menu" inert>
+    <nav aria-label="Mobile">
+      <a href="#tour">Tour</a>
+      <a href="#students">Students</a>
+      <a href="#mentors">Mentors</a>
+      <a href="#office">The office</a>
+      <a href="#more">More</a>
+    </nav>
+    <div class="mobile-menu-actions">
+      <a class="btn btn-gold" href="mailto:brightup.learn@gmail.com?subject=Bright%20Up%20invitation%20request">Request an invitation</a>
+      <a class="btn btn-ghost" href="https://brightup-learn.netlify.app/login">Sign in</a>
+      <button class="motion-text" type="button" data-motion-toggle aria-pressed="false">Pause animations</button>
+    </div>
+  </div>
+
   <main id="main">
     <section class="hero" id="top">
+      <div class="aurora" aria-hidden="true"><i></i><i></i></div>
+      <canvas class="sparks" data-sparks aria-hidden="true"></canvas>
       <svg class="hero-rays" viewBox="0 0 400 400" aria-hidden="true">
-        <g stroke="#FBB000" stroke-width="2" stroke-linecap="round" opacity=".55">
-          <path d="M200 130V70M250 144l24-50M150 144l-24-50M288 182l52-26M112 182l-52-26"/>
+        <g class="rays" fill="none" stroke="#FBB000" stroke-width="2.5" stroke-linecap="round">
+          <path pathLength="1" d="M200 130V70"/><path pathLength="1" d="m250 144 24-50"/><path pathLength="1" d="m150 144-24-50"/><path pathLength="1" d="m288 182 52-26"/><path pathLength="1" d="m112 182-52-26"/>
         </g>
-        <path fill="#FBB000" d="M200 150c3 30 20 47 50 50-30 3-47 20-50 50-3-30-20-47-50-50 30-3 47-20 50-50Z"/>
+        <circle class="star-glow" cx="200" cy="200" r="86" fill="url(#star-glow)"/>
+        <path class="star" fill="#FBB000" d="M200 150c3 30 20 47 50 50-30 3-47 20-50 50-3-30-20-47-50-50 30-3 47-20 50-50Z"/>
+        <defs><radialGradient id="star-glow"><stop offset="0" stop-color="#FBB000" stop-opacity=".42"/><stop offset="1" stop-color="#FBB000" stop-opacity="0"/></radialGradient></defs>
       </svg>
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow eyebrow-gold">Unlock potential</p>
-          <h1>One bright place to learn, teach and run your institute<span class="stop">.</span></h1>
-          <p class="lede">Classes, coding practice, assignments, fees, attendance and enquiries, all in one app. Students know what to do next. Mentors see every batch. The office sees everything.</p>
-          <div class="hero-actions">
-            <a class="btn btn-gold" href="#tour-frame" data-play-tour>
+          <p class="eyebrow eyebrow-gold hero-in" style="--d: .02s">Unlock potential</p>
+          <h1 data-split>One <span class="gold">bright</span> place to learn, teach and run your institute<span class="stop">.</span></h1>
+          <p class="lede hero-in" style="--d: .62s">Classes, coding practice, assignments, fees, attendance and enquiries, all in one app. Students know what to do next. Mentors see every batch. The office sees everything.</p>
+          <div class="hero-actions hero-in" style="--d: .76s">
+            <a class="btn btn-gold" data-magnetic href="#tour-frame" data-play-tour>
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
               Watch the 48-second tour
             </a>
             <a class="btn btn-ghost" href="mailto:brightup.learn@gmail.com?subject=Bright%20Up%20invitation%20request">Request an invitation</a>
           </div>
-          <p class="hero-note">Bright Up is invitation-only. Already have an account? <a href="https://brightup-learn.netlify.app/login">Sign in</a></p>
+          <p class="hero-note hero-in" style="--d: .9s">Bright Up is invitation-only. Already have an account? <a href="https://brightup-learn.netlify.app/login">Sign in</a></p>
         </div>
-        <div class="hero-visual">
-          <div class="window">
-            <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/dashboard</span></div>
-            <img src="assets/img/mentor-dashboard-1600.webp" srcset="assets/img/mentor-dashboard-960.webp 960w, assets/img/mentor-dashboard-1600.webp 1600w" sizes="(min-width: 1000px) 62vw, 100vw" width="1600" height="1000" fetchpriority="high" alt="A mentor's dashboard in Bright Up, with totals for students, batches and fees, and charts of enrolments and batches.">
-          </div>
-          <div class="phone">
-            <img src="assets/img/me-phone-360.webp" srcset="assets/img/me-phone-360.webp 360w, assets/img/me-phone-640.webp 640w" sizes="220px" width="360" height="738" alt="A student's My Learning page on a phone, showing the next class and what needs attention.">
+        <div class="hero-visual" data-scrub="hero-visual">
+          <div class="hero-tilt" id="hero-tilt">
+            <div class="window hero-window">
+              <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/dashboard</span></div>
+              <img src="assets/img/mentor-dashboard-1600.webp" srcset="assets/img/mentor-dashboard-960.webp 960w, assets/img/mentor-dashboard-1600.webp 1600w" sizes="(min-width: 1040px) 60vw, 100vw" width="1600" height="1000" fetchpriority="high" alt="A mentor's dashboard in Bright Up, with totals for students, batches and fees, and charts of enrolments and batches.">
+            </div>
+            <div class="phone-wrap" data-parallax="-0.07">
+              <div class="phone">
+                <img src="assets/img/me-phone-360.webp" srcset="assets/img/me-phone-360.webp 360w, assets/img/me-phone-640.webp 640w" sizes="220px" width="360" height="738" alt="A student's My Learning page on a phone, showing the next class and what needs attention.">
+              </div>
+            </div>
+            <div class="chip chip-a" data-parallax="-0.13" aria-hidden="true"><span class="chip-float"><b class="dot dot-green"></b>Attendance recorded</span></div>
+            <div class="chip chip-b" data-parallax="-0.04" aria-hidden="true"><span class="chip-float"><svg viewBox="0 0 24 24" width="15" height="15"><path fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></svg>Looks good</span></div>
+            <div class="chip chip-c" data-parallax="-0.1" aria-hidden="true"><span class="chip-float mono"><b class="dot dot-gold"></b>Class average: 83</span></div>
           </div>
         </div>
       </div>
     </section>
 
+    <section class="ticker" aria-label="What's inside Bright Up">
+      <ul class="ticker-track" id="ticker-track">
+        <li>Live classes</li>
+        <li>Automatic attendance</li>
+        <li>Python practice</li>
+        <li>Code playground</li>
+        <li>Assignments</li>
+        <li>UPI fees</li>
+        <li>Enquiries</li>
+        <li>Assistant</li>
+        <li>Careers community</li>
+        <li>Workshops</li>
+        <li>Projects</li>
+        <li>Reports</li>
+      </ul>
+    </section>
+
     <section class="roles" aria-label="Who Bright Up is for">
-      <div class="container roles-grid">
-        <a class="role-card role-gold reveal" href="#students">
-          <span class="role-name">Students</span>
+      <div class="container roles-grid" data-stagger>
+        <a class="role-card role-gold spot" data-reveal href="#students">
+          <span class="role-name">Students <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           <span class="role-line">Join classes, practise code and get feedback from your mentor.</span>
         </a>
-        <a class="role-card role-teal reveal" href="#mentors">
-          <span class="role-name">Mentors</span>
+        <a class="role-card role-teal spot" data-reveal href="#mentors">
+          <span class="role-name">Mentors <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           <span class="role-line">Run each batch: schedule, attendance, materials and reviews.</span>
         </a>
-        <a class="role-card role-blue reveal" href="#office">
-          <span class="role-name">The office</span>
+        <a class="role-card role-blue spot" data-reveal href="#office">
+          <span class="role-name">The office <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           <span class="role-line">Keep track of fees, follow up every lead and see the whole institute.</span>
         </a>
       </div>
     </section>
 
-    <section class="tour" id="tour">
+    <section class="tour curtain" id="tour" data-scrub="curtain">
+      <div class="curtain-bg" aria-hidden="true"><div class="aurora aurora-soft"><i></i><i></i></div></div>
       <div class="container">
-        <div class="section-head center reveal">
-          <p class="eyebrow">See it in action</p>
-          <h2>The whole of Bright&nbsp;Up in 48 seconds<span class="stop">.</span></h2>
-          <p class="section-sub">A quick walk through the real app, from a student's first class to the office's fee records.</p>
+        <div class="section-head center on-dark">
+          <p class="eyebrow eyebrow-gold" data-reveal>See it in action</p>
+          <h2 data-split>The whole of Bright&nbsp;Up in 48 seconds<span class="stop">.</span></h2>
+          <p class="section-sub" data-reveal>A quick walk through the real app, from a student's first class to the office's fee records.</p>
         </div>
-        <div class="video-frame reveal" id="tour-frame">
+        <div class="video-frame" id="tour-frame" data-scrub="video">
           <video id="tour-video" preload="none" playsinline controls poster="assets/img/video-poster.webp" width="1600" height="900">
             <source src="assets/video/bright-up-tour.mp4" type="video/mp4">
             Your browser can't play this video. <a href="assets/video/bright-up-tour.mp4">Download it instead.</a>
           </video>
           <button class="video-play" id="tour-play" type="button" aria-label="Play the 48-second tour with sound">
-            <span class="video-play-icon"><svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg></span>
+            <span class="video-play-icon"><i class="ping"></i><i class="ping ping-2"></i><svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg></span>
             <span class="video-play-label">Play with sound</span>
           </button>
         </div>
@@ -116,87 +170,136 @@
 
     <section class="students" id="students">
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow eyebrow-gold-ink">For students</p>
-          <h2>Always know what to do next<span class="stop">.</span></h2>
+        <div class="section-head">
+          <p class="eyebrow eyebrow-gold-ink" data-reveal>For students</p>
+          <h2 data-split>Always know what to do next<span class="stop">.</span></h2>
         </div>
 
-        <article class="feature reveal">
-          <div class="feature-copy">
-            <h3>Your whole day, ready when you sign in.</h3>
-            <p>Sign in and everything that matters today is already on one page, on your laptop or your phone.</p>
-            <ul class="ticks">
-              <li>Your next class, with a countdown</li>
-              <li>A short list of what needs your attention</li>
-              <li>Attendance, fees, practice streak and assignments</li>
-            </ul>
-          </div>
-          <div class="window">
-            <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/me</span></div>
-            <img loading="lazy" decoding="async" src="assets/img/me-c1400.webp" srcset="assets/img/me-c900.webp 900w, assets/img/me-c1400.webp 1400w" sizes="(min-width: 1000px) 700px, 100vw" width="1400" height="1094" alt="A student's My Learning page, showing the next class, what needs attention, attendance, fees and practice streak.">
-          </div>
-        </article>
+        <div class="story" id="story">
+          <div class="story-steps">
+            <div class="story-rail" aria-hidden="true"><span id="story-rail-fill"></span></div>
 
-        <article class="feature flip reveal">
-          <div class="feature-copy">
-            <h3>Join class in one click.</h3>
-            <p>Open your batch and join the Google Meet class right from Bright Up. Attendance is recorded for you, along with when you joined and left.</p>
-            <ul class="ticks">
-              <li>Weekly schedule and extra classes</li>
-              <li>Syllabus progress and the next topic</li>
-              <li>Notes, slides, PDFs and YouTube videos for your batch</li>
-            </ul>
-          </div>
-          <div class="window">
-            <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/my-batches</span></div>
-            <img loading="lazy" decoding="async" src="assets/img/my-batch-c1400.webp" srcset="assets/img/my-batch-c900.webp 900w, assets/img/my-batch-c1400.webp 1400w" sizes="(min-width: 1000px) 700px, 100vw" width="1400" height="1094" alt="A batch page with the Join meeting button, next class, attendance and syllabus progress.">
-          </div>
-        </article>
+            <article class="step" data-tint="#fbb000">
+              <div class="step-copy">
+                <span class="step-num" aria-hidden="true">01</span>
+                <h3>Your whole day, ready when you sign in<span class="stop-sm">.</span></h3>
+                <p>Sign in and everything that matters today is already on one page, on your laptop or your phone.</p>
+                <ul class="ticks">
+                  <li>Your next class, with a countdown</li>
+                  <li>A short list of what needs your attention</li>
+                  <li>Attendance, fees, practice streak and assignments</li>
+                </ul>
+              </div>
+              <div class="shot" data-play="me">
+                <div class="window">
+                  <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/me</span></div>
+                  <div class="shot-media">
+                    <img loading="lazy" decoding="async" src="assets/img/me-c1400.webp" srcset="assets/img/me-c900.webp 900w, assets/img/me-c1400.webp 1400w" sizes="(min-width: 1040px) 56vw, 100vw" width="1400" height="1094" alt="A student's My Learning page, showing the next class, what needs attention, attendance, fees and practice streak.">
+                    <span class="ring" aria-hidden="true" style="--x: 58.4%; --y: 23.6%; --w: 39.6%; --h: 21%; --d: .55s"></span>
+                  </div>
+                </div>
+                <div class="shot-phone" aria-hidden="true"><div class="phone"><img loading="lazy" decoding="async" src="assets/img/me-phone-360.webp" width="360" height="738" alt=""></div></div>
+              </div>
+            </article>
 
-        <article class="feature reveal">
-          <div class="feature-copy">
-            <h3>Practise until it clicks.</h3>
-            <p>A full Python track with <strong>280 programs</strong> and <strong>195 quiz questions</strong> across 13 topics. New programs unlock as your batch goes on, and tests check every solution automatically.</p>
-            <ul class="ticks">
-              <li>Sample tests you can see, and hidden ones that keep you honest</li>
-              <li>Easy, medium and hard programs in every topic</li>
-              <li>A streak that shows you're keeping it up</li>
-            </ul>
-          </div>
-          <div class="window">
-            <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/practice</span></div>
-            <img loading="lazy" decoding="async" src="assets/img/practice-track-c1400.webp" srcset="assets/img/practice-track-c900.webp 900w, assets/img/practice-track-c1400.webp 1400w" sizes="(min-width: 1000px) 700px, 100vw" width="1400" height="1094" alt="The Python practice track, showing programs unlocked, today's programs, streak and recent submissions.">
-          </div>
-        </article>
+            <article class="step" data-tint="#2563eb">
+              <div class="step-copy">
+                <span class="step-num" aria-hidden="true">02</span>
+                <h3>Join class in one click<span class="stop-sm">.</span></h3>
+                <p>Open your batch and join the Google Meet class right from Bright Up. Attendance is recorded for you, along with when you joined and left.</p>
+                <ul class="ticks">
+                  <li>Weekly schedule and extra classes</li>
+                  <li>Syllabus progress and the next topic</li>
+                  <li>Notes, slides, PDFs and YouTube videos for your batch</li>
+                </ul>
+              </div>
+              <div class="shot" data-play="batch">
+                <div class="window">
+                  <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/my-batches</span></div>
+                  <div class="shot-media">
+                    <img loading="lazy" decoding="async" src="assets/img/my-batch-c1400.webp" srcset="assets/img/my-batch-c900.webp 900w, assets/img/my-batch-c1400.webp 1400w" sizes="(min-width: 1040px) 56vw, 100vw" width="1400" height="1094" alt="A batch page with the Join class button, next class, attendance and syllabus progress.">
+                    <span class="ring" aria-hidden="true" style="--x: 5%; --y: 59.4%; --w: 12.2%; --h: 7.2%; --d: 1.5s"></span>
+                    <span class="ripple" aria-hidden="true" style="--x: 11.1%; --y: 63%; --d: 1.4s"></span>
+                    <span class="cursor" aria-hidden="true" style="--from-x: 62%; --from-y: 92%; --x: 11.1%; --y: 63%"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#0f172a" stroke="#fff" stroke-width="1.6" d="M5 3l14 8-6 2-3 6z"/></svg></span>
+                    <span class="toast" aria-hidden="true" style="--x: 21%; --y: 60%; --d: 1.75s"><b class="dot dot-green"></b>Marked Present</span>
+                  </div>
+                </div>
+              </div>
+            </article>
 
-        <article class="feature flip reveal">
-          <div class="feature-copy">
-            <h3>Write code. Run it right here.</h3>
-            <p>There's nothing to install. Python and JavaScript run in your browser, and Java runs on Bright Up's code runner.</p>
-            <ul class="ticks">
-              <li>Save your snippets by topic</li>
-              <li>Your own private question bank</li>
-              <li>Give your program input and see its output below</li>
-            </ul>
-          </div>
-          <div class="window">
-            <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/playground</span></div>
-            <img loading="lazy" decoding="async" src="assets/img/playground-run-c1400.webp" srcset="assets/img/playground-run-c900.webp 900w, assets/img/playground-run-c1400.webp 1400w" sizes="(min-width: 1000px) 700px, 100vw" width="1400" height="1269" alt="The code playground after running a Python program, with its output shown below the editor.">
-          </div>
-        </article>
+            <article class="step" data-tint="#009c94">
+              <div class="step-copy">
+                <span class="step-num" aria-hidden="true">03</span>
+                <h3>Practise until it clicks<span class="stop-sm">.</span></h3>
+                <p>A full Python track with <strong>280 programs</strong> and <strong>195 quiz questions</strong> across 13 topics. New programs unlock as your batch goes on, and tests check every solution automatically.</p>
+                <ul class="ticks">
+                  <li>Sample tests you can see, and hidden ones that keep you honest</li>
+                  <li>Easy, medium and hard programs in every topic</li>
+                  <li>A streak that shows you're keeping it up</li>
+                </ul>
+              </div>
+              <div class="shot" data-play="practice">
+                <div class="window">
+                  <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/practice</span></div>
+                  <div class="shot-media">
+                    <img loading="lazy" decoding="async" src="assets/img/practice-track-c1400.webp" srcset="assets/img/practice-track-c900.webp 900w, assets/img/practice-track-c1400.webp 1400w" sizes="(min-width: 1040px) 56vw, 100vw" width="1400" height="1094" alt="The Python practice track, showing programs unlocked, today's programs, streak and recent submissions.">
+                    <span class="ring" aria-hidden="true" style="--x: 1.4%; --y: 17.4%; --w: 23.2%; --h: 13.2%; --d: .5s"></span>
+                    <span class="ring" aria-hidden="true" style="--x: 2%; --y: 33.4%; --w: 63.6%; --h: 53%; --d: 1.2s"></span>
+                    <span class="toast" aria-hidden="true" style="--x: 33%; --y: 7.6%; --d: 1.8s"><b class="dot dot-gold"></b>5 new programs today</span>
+                  </div>
+                </div>
+              </div>
+            </article>
 
-        <div class="trio">
-          <article class="card reveal">
+            <article class="step" data-tint="#7c3aed">
+              <div class="step-copy">
+                <span class="step-num" aria-hidden="true">04</span>
+                <h3>Write code. Run it right here<span class="stop-sm">.</span></h3>
+                <p>There's nothing to install. Python and JavaScript run in your browser, and Java runs on Bright Up's code runner.</p>
+                <ul class="ticks">
+                  <li>Save your snippets by topic</li>
+                  <li>Your own private question bank</li>
+                  <li>Give your program input and see its output below</li>
+                </ul>
+              </div>
+              <div class="shot" data-play="playground">
+                <div class="window">
+                  <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/playground</span></div>
+                  <div class="shot-media">
+                    <img class="img-before" loading="lazy" decoding="async" src="assets/img/playground-before-c1400.webp" srcset="assets/img/playground-before-c900.webp 900w, assets/img/playground-before-c1400.webp 1400w" sizes="(min-width: 1040px) 56vw, 100vw" width="1400" height="1195" alt="">
+                    <img class="img-after" style="--d: 1.5s" loading="lazy" decoding="async" src="assets/img/playground-run-c1400.webp" srcset="assets/img/playground-run-c900.webp 900w, assets/img/playground-run-c1400.webp 1400w" sizes="(min-width: 1040px) 56vw, 100vw" width="1400" height="1195" alt="The code playground after running a Python program, with its output shown below the editor.">
+                    <span class="ripple" aria-hidden="true" style="--x: 90.3%; --y: 7.2%; --d: 1.4s"></span>
+                    <span class="cursor" aria-hidden="true" style="--from-x: 40%; --from-y: 62%; --x: 90.3%; --y: 7.2%"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#0f172a" stroke="#fff" stroke-width="1.6" d="M5 3l14 8-6 2-3 6z"/></svg></span>
+                    <span class="ring" aria-hidden="true" style="--x: 32.4%; --y: 81.6%; --w: 63.4%; --h: 17%; --d: 1.85s"></span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="story-stage" id="story-stage" hidden>
+            <div class="stage-inner" id="stage-inner"><span class="stage-glow" id="stage-glow"></span></div>
+          </div>
+        </div>
+
+        <ul class="stats" data-stagger aria-label="The Python track in numbers">
+          <li data-reveal><b data-count="13">13</b><span>Python topics</span></li>
+          <li data-reveal><b data-count="280">280</b><span>programs to solve</span></li>
+          <li data-reveal><b data-count="195">195</b><span>quiz questions</span></li>
+          <li data-reveal><b data-count="10" data-suffix="+">10+</b><span>tests on every program</span></li>
+        </ul>
+
+        <div class="trio" data-stagger>
+          <article class="card tilt spot" data-reveal>
             <div class="card-shot" style="--zoom: 190%; --left: -38%; --top: -6%"><img loading="lazy" decoding="async" src="assets/img/assignment-detail-960.webp" width="960" height="600" alt="An assignment with the student's code and the mentor's review beside it."></div>
             <h3>Feedback from your mentor</h3>
             <p>Their review sits right beside your code, so you can see exactly what to change.</p>
           </article>
-          <article class="card reveal">
+          <article class="card tilt spot" data-reveal>
             <div class="card-shot" style="--zoom: 190%; --left: -38%; --top: -6%"><img loading="lazy" decoding="async" src="assets/img/careers-960.webp" width="960" height="600" alt="The careers community feed with job openings and journey updates."></div>
             <h3>Grow together</h3>
             <p>Share job openings and career journeys, then like, comment and help each other along.</p>
           </article>
-          <article class="card reveal">
+          <article class="card tilt spot" data-reveal>
             <div class="card-shot" style="--zoom: 190%; --left: -38%; --top: -6%"><img loading="lazy" decoding="async" src="assets/img/chat-960.webp" width="960" height="600" alt="A live chat conversation between a student and the institute's staff."></div>
             <h3>Help is a message away</h3>
             <p>Live chat with mentors and the office, right inside the app.</p>
@@ -207,52 +310,75 @@
 
     <section class="mentors" id="mentors">
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow eyebrow-teal">For mentors</p>
-          <h2>Every batch in one place<span class="stop">.</span></h2>
-          <p class="section-sub">Schedule, attendance, syllabus, materials and reviews for each batch you teach, plus your own view of its fees.</p>
+        <div class="section-head">
+          <p class="eyebrow eyebrow-teal" data-reveal>For mentors</p>
+          <h2 data-split>Every batch in one place<span class="stop">.</span></h2>
+          <p class="section-sub" data-reveal>Schedule, attendance, syllabus, materials and reviews for each batch you teach, plus your own view of its fees.</p>
         </div>
-        <div class="duo">
-          <figure class="reveal">
+
+        <div class="att" id="att" data-reveal role="img" aria-label="An animated class timeline. A student who joins on time is marked Present, a student who joins more than ten minutes late is marked Late, and a student who never joins is marked Absent.">
+          <div class="att-scale" aria-hidden="true"><span style="--at: 0%">Class starts</span><span class="att-scale-mid" style="--at: 25%">+10 min</span><span style="--at: 100%">Class ends</span></div>
+          <div class="att-row" aria-hidden="true" style="--t: .18; --s: .2">
+            <span class="att-name">Aarav Mehta</span>
+            <span class="att-track"><i class="att-fill"></i><i class="att-tick"></i><i class="att-dot"></i></span>
+            <span class="att-chip att-present">Present</span>
+          </div>
+          <div class="att-row" aria-hidden="true" style="--t: .4; --s: .42">
+            <span class="att-name">Diya Patel</span>
+            <span class="att-track"><i class="att-fill"></i><i class="att-tick"></i><i class="att-dot att-dot-late"></i></span>
+            <span class="att-chip att-late">Late</span>
+          </div>
+          <div class="att-row" aria-hidden="true" style="--t: 1; --s: 1">
+            <span class="att-name">Dev Singh</span>
+            <span class="att-track"><i class="att-fill att-fill-none"></i><i class="att-tick"></i></span>
+            <span class="att-chip att-absent">Absent</span>
+          </div>
+        </div>
+
+        <div class="duo" data-stagger>
+          <figure data-reveal>
             <figcaption><strong>Attendance that mostly takes care of itself.</strong> When students join online, they're marked Present or Late. Anyone who never joins is marked Absent. Your own mark always wins.</figcaption>
-            <div class="window">
+            <div class="window tilt">
               <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/batches</span></div>
-              <img loading="lazy" decoding="async" src="assets/img/mentor-attendance-c1400.webp" srcset="assets/img/mentor-attendance-c900.webp 900w, assets/img/mentor-attendance-c1400.webp 1400w" sizes="(min-width: 900px) 590px, 100vw" width="1400" height="875" alt="A batch's attendance tab, with each student's status for the day.">
+              <img loading="lazy" decoding="async" src="assets/img/mentor-attendance-c1400.webp" srcset="assets/img/mentor-attendance-c900.webp 900w, assets/img/mentor-attendance-c1400.webp 1400w" sizes="(min-width: 860px) 45vw, 100vw" width="1400" height="875" alt="A batch's attendance tab, with each student's status for the day.">
             </div>
           </figure>
-          <figure class="reveal">
+          <figure data-reveal>
             <figcaption><strong>Reviews without the back-and-forth.</strong> See who did what, read each student's answers, run their code and comment. Then mark it Looks good or Needs changes.</figcaption>
-            <div class="window">
+            <div class="window tilt">
               <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/assignments</span></div>
-              <img loading="lazy" decoding="async" src="assets/img/mentor-review-c1400.webp" srcset="assets/img/mentor-review-c900.webp 900w, assets/img/mentor-review-c1400.webp 1400w" sizes="(min-width: 900px) 590px, 100vw" width="1400" height="875" alt="An assignment's review page, with each student's progress on the left and a student's answer on the right, with Looks good and Needs changes buttons.">
+              <img loading="lazy" decoding="async" src="assets/img/mentor-review-c1400.webp" srcset="assets/img/mentor-review-c900.webp 900w, assets/img/mentor-review-c1400.webp 1400w" sizes="(min-width: 860px) 45vw, 100vw" width="1400" height="875" alt="An assignment's review page, with each student's progress on the left and a student's answer on the right, with Looks good and Needs changes buttons.">
             </div>
           </figure>
         </div>
       </div>
     </section>
 
-    <section class="office" id="office">
+    <section class="office curtain" id="office" data-scrub="curtain">
+      <div class="curtain-bg" aria-hidden="true"><div class="aurora aurora-soft"><i></i><i></i></div></div>
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow eyebrow-sky">For the office</p>
-          <h2>The whole institute at a glance<span class="stop">.</span></h2>
+        <div class="section-head on-dark">
+          <p class="eyebrow eyebrow-sky" data-reveal>For the office</p>
+          <h2 data-split>The whole institute at a glance<span class="stop">.</span></h2>
         </div>
-        <div class="tabs reveal" data-tabs>
+        <div class="tabs" data-tabs data-reveal>
           <div class="tab-list" role="tablist" aria-label="What the office can do">
-            <button class="tab" role="tab" type="button" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="true">Dashboard</button>
-            <button class="tab" role="tab" type="button" id="tab-fees" aria-controls="panel-fees" aria-selected="false" tabindex="-1">Fees</button>
-            <button class="tab" role="tab" type="button" id="tab-enquiries" aria-controls="panel-enquiries" aria-selected="false" tabindex="-1">Enquiries</button>
-            <button class="tab" role="tab" type="button" id="tab-assistant" aria-controls="panel-assistant" aria-selected="false" tabindex="-1">Assistant</button>
+            <span class="tab-indicator" aria-hidden="true"></span>
+            <button class="tab" role="tab" type="button" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="true">Dashboard<i class="tab-progress" aria-hidden="true"></i></button>
+            <button class="tab" role="tab" type="button" id="tab-fees" aria-controls="panel-fees" aria-selected="false" tabindex="-1">Fees<i class="tab-progress" aria-hidden="true"></i></button>
+            <button class="tab" role="tab" type="button" id="tab-enquiries" aria-controls="panel-enquiries" aria-selected="false" tabindex="-1">Enquiries<i class="tab-progress" aria-hidden="true"></i></button>
+            <button class="tab" role="tab" type="button" id="tab-assistant" aria-controls="panel-assistant" aria-selected="false" tabindex="-1">Assistant<i class="tab-progress" aria-hidden="true"></i></button>
           </div>
 
           <div class="tab-panel" role="tabpanel" id="panel-dashboard" aria-labelledby="tab-dashboard">
             <div class="tab-copy">
               <h3>One dashboard for everything.</h3>
               <p>Students, batches, fees and enquiries are together on one screen. Open any number to see what's behind it.</p>
+              <div class="mini-bars" aria-hidden="true"><i style="--h: 22%; --i: 0"></i><i style="--h: 34%; --i: 1"></i><i style="--h: 28%; --i: 2"></i><i style="--h: 52%; --i: 3"></i><i style="--h: 44%; --i: 4"></i><i style="--h: 70%; --i: 5"></i><i style="--h: 60%; --i: 6"></i><i style="--h: 92%; --i: 7"></i></div>
             </div>
-            <div class="window">
+            <div class="window panel-window">
               <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/dashboard</span></div>
-              <img loading="lazy" decoding="async" src="assets/img/admin-dashboard-1600.webp" srcset="assets/img/admin-dashboard-960.webp 960w, assets/img/admin-dashboard-1600.webp 1600w" sizes="(min-width: 1000px) 780px, 100vw" width="1600" height="1000" alt="The admin dashboard with totals for students, batches and fees, plus charts of enrolments and batches.">
+              <img loading="lazy" decoding="async" src="assets/img/admin-dashboard-1600.webp" srcset="assets/img/admin-dashboard-960.webp 960w, assets/img/admin-dashboard-1600.webp 1600w" sizes="(min-width: 1040px) 60vw, 100vw" width="1600" height="1000" alt="The admin dashboard with totals for students, batches and fees, plus charts of enrolments and batches.">
             </div>
           </div>
 
@@ -260,10 +386,11 @@
             <div class="tab-copy">
               <h3>Every rupee on record.</h3>
               <p>Students pay by UPI and you confirm it. Payments go on a ledger that can't be rewritten, with clear charts of what's come in and what's still pending.</p>
+              <ol class="flow" aria-hidden="true"><li style="--i: 0">Student pays by UPI</li><li style="--i: 1">You confirm</li><li style="--i: 2">On the ledger</li></ol>
             </div>
-            <div class="window">
+            <div class="window panel-window">
               <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/payments</span></div>
-              <img loading="lazy" decoding="async" src="assets/img/payments-analytics-1600.webp" srcset="assets/img/payments-analytics-960.webp 960w, assets/img/payments-analytics-1600.webp 1600w" sizes="(min-width: 1000px) 780px, 100vw" width="1600" height="1000" alt="Payment analytics showing money received over time and how students paid.">
+              <img loading="lazy" decoding="async" src="assets/img/payments-analytics-1600.webp" srcset="assets/img/payments-analytics-960.webp 960w, assets/img/payments-analytics-1600.webp 1600w" sizes="(min-width: 1040px) 60vw, 100vw" width="1600" height="1000" alt="Payment analytics showing money received over time and how students paid.">
             </div>
           </div>
 
@@ -271,21 +398,26 @@
             <div class="tab-copy">
               <h3>Follow up every lead.</h3>
               <p>A Today list shows who to call. Every call, message and visit goes on the lead's timeline, from first enquiry to enrolment.</p>
+              <ol class="pipe" aria-hidden="true"><li style="--i: 0">New</li><li style="--i: 1">Contacted</li><li style="--i: 2">Interested</li><li style="--i: 3">Demo</li><li style="--i: 4">Negotiation</li><li style="--i: 5">Converted</li></ol>
             </div>
-            <div class="window">
+            <div class="window panel-window">
               <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/enquiries</span></div>
-              <img loading="lazy" decoding="async" src="assets/img/enquiry-lead-2-1600.webp" srcset="assets/img/enquiry-lead-2-960.webp 960w, assets/img/enquiry-lead-2-1600.webp 1600w" sizes="(min-width: 1000px) 780px, 100vw" width="1600" height="1000" alt="A lead's page with its pipeline stage, details and a timeline of every contact.">
+              <img loading="lazy" decoding="async" src="assets/img/enquiry-lead-2-1600.webp" srcset="assets/img/enquiry-lead-2-960.webp 960w, assets/img/enquiry-lead-2-1600.webp 1600w" sizes="(min-width: 1040px) 60vw, 100vw" width="1600" height="1000" alt="A lead's page with its pipeline stage, details and a timeline of every contact.">
             </div>
           </div>
 
           <div class="tab-panel" role="tabpanel" id="panel-assistant" aria-labelledby="tab-assistant">
             <div class="tab-copy">
               <h3>Just ask.</h3>
-              <p>"Which students have pending fees above 5000?" "Who has attendance below 75%?" Get answers from your own data. The assistant only reads, and never changes anything.</p>
+              <p>Ask things like "Who has attendance below 75%?" and get answers from your own data. The assistant only reads, and never changes anything.</p>
+              <div class="ask" aria-hidden="true">
+                <p class="ask-q"><span id="ask-text">Which students have pending fees above 5000?</span><i class="caret"></i></p>
+                <p class="ask-a" id="ask-answer">26 enrolments still have an outstanding balance; the largest is listed first.</p>
+              </div>
             </div>
-            <div class="window">
+            <div class="window panel-window">
               <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>brightup-learn.netlify.app/assistant</span></div>
-              <img loading="lazy" decoding="async" src="assets/img/assistant-answer-1600.webp" srcset="assets/img/assistant-answer-960.webp 960w, assets/img/assistant-answer-1600.webp 1600w" sizes="(min-width: 1000px) 780px, 100vw" width="1600" height="928" alt="The assistant answering a question about pending fees, with suggested questions above the answer.">
+              <img loading="lazy" decoding="async" src="assets/img/assistant-answer-1600.webp" srcset="assets/img/assistant-answer-960.webp 960w, assets/img/assistant-answer-1600.webp 1600w" sizes="(min-width: 1040px) 60vw, 100vw" width="1600" height="928" alt="The assistant answering a question about pending fees, with suggested questions above the answer.">
             </div>
           </div>
         </div>
@@ -294,52 +426,52 @@
 
     <section class="more" id="more">
       <div class="container">
-        <div class="section-head center reveal">
-          <p class="eyebrow">And there's more</p>
-          <h2>It all lives together<span class="stop">.</span></h2>
+        <div class="section-head center">
+          <p class="eyebrow" data-reveal>And there's more</p>
+          <h2 data-split>It all lives together<span class="stop">.</span></h2>
         </div>
-        <ul class="more-grid">
-          <li class="reveal">
+        <ul class="more-grid" data-stagger>
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
             <h3>Workshops</h3>
             <p>Run demo classes, webinars and college promotions, each with its own registration form.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg>
             <h3>Projects</h3>
             <p>A separate workspace for freelance work, with sprints, tasks, discussion and earnings.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
             <h3>Reports</h3>
             <p>Fees due, attendance and monthly growth. Export any report to CSV.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"/></svg>
             <h3>Live chat</h3>
             <p>Real-time conversations between students, mentors and the office.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5"/><rect x="3" y="7" width="18" height="4" rx="1"/></svg>
             <h3>Refer and earn</h3>
             <p>Track who referred whom, and the bonus each referral has earned.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></svg>
             <h3>Mentor certificates</h3>
             <p>Students can see the certificates their mentors hold.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>
             <h3>Resources library</h3>
             <p>Share useful links and documents by skill, with ratings and comments.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
             <h3>Notifications</h3>
             <p>Reminders for classes and follow-ups, plus news of new materials and schedule changes.</p>
           </li>
-          <li class="reveal">
+          <li class="spot" data-reveal>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M8 13h.01"/><path d="M12 13h.01"/><path d="M16 13h.01"/><path d="M8 17h.01"/><path d="M12 17h.01"/><path d="M16 17h.01"/></svg>
             <h3>Schedules</h3>
             <p>Weekly timetables for every batch, with one-off extra classes when you need them.</p>
@@ -350,12 +482,34 @@
 
     <section class="cta">
       <div class="container">
-        <div class="cta-panel reveal">
-          <svg class="cta-star" viewBox="0 0 100 100" aria-hidden="true"><path fill="#FBB000" d="M50 0c3 30 20 47 50 50-30 3-47 20-50 50-3-30-20-47-50-50 30-3 47-20 50-50Z"/></svg>
-          <h2>Bring it all into one bright place<span class="stop">.</span></h2>
-          <p>Bright Up is invitation-only. Write to us and ask for yours.</p>
-          <div class="hero-actions center">
-            <a class="btn btn-gold" href="mailto:brightup.learn@gmail.com?subject=Bright%20Up%20invitation%20request">Request an invitation</a>
+        <div class="cta-panel" data-scrub="book">
+          <canvas class="sparks" data-sparks aria-hidden="true"></canvas>
+          <svg class="book" viewBox="0 0 400 270" aria-hidden="true">
+            <g class="book-star">
+              <g class="book-rays" fill="none" stroke="#FBB000" stroke-width="2.5" stroke-linecap="round"><path pathLength="1" d="M200 16V-6"/><path pathLength="1" d="m232 26 12-20"/><path pathLength="1" d="m168 26-12-20"/><path pathLength="1" d="m258 50 21-10"/><path pathLength="1" d="m142 50-21-10"/></g>
+              <path fill="#FBB000" d="M200 26c2.400 22 14.600 34 36 36-21.400 2-33.600 14-36 36-2.400-22-14.600-34-36-36 21.400-2 33.600-14 36-36Z"/>
+            </g>
+            <g transform="translate(200 250)">
+              <g class="book-side">
+                <path class="page" style="--a: 44deg; --o: .55" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 33deg; --o: .68" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 22deg; --o: .8" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 11deg; --o: .9" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 0deg; --o: 1" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+              </g>
+              <g class="book-side" transform="scale(-1 1)">
+                <path class="page" style="--a: 44deg; --o: .55" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 33deg; --o: .68" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 22deg; --o: .8" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 11deg; --o: .9" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+                <path class="page" style="--a: 0deg; --o: 1" d="M0 0C-50-36-120-48-186-28-122-22-56-8 0 0Z"/>
+              </g>
+            </g>
+          </svg>
+          <h2 data-split>Bring it all into one bright place<span class="stop">.</span></h2>
+          <p data-reveal>Bright Up is invitation-only. Write to us and ask for yours.</p>
+          <div class="hero-actions center" data-reveal>
+            <a class="btn btn-gold" data-magnetic href="mailto:brightup.learn@gmail.com?subject=Bright%20Up%20invitation%20request">Request an invitation</a>
             <a class="btn btn-ghost" href="https://brightup-learn.netlify.app/login">Sign in</a>
           </div>
         </div>
@@ -366,9 +520,15 @@
   <footer class="site-footer">
     <div class="container footer-row">
       <img src="assets/img/brightup-wordmark.png" alt="Bright Up. Unlock potential." width="180" height="48" loading="lazy">
-      <p class="footer-note">Every screen on this page is the real app running on sample data. All names are fictional.</p>
+      <p class="footer-note">The screens on this page are the real app running on sample data, and all names are fictional. The small animated graphics are illustrations of how it works.</p>
+      <button class="motion-text" type="button" data-motion-toggle aria-pressed="false">Pause animations</button>
       <p class="footer-copy">&copy; 2026 Bright Up</p>
     </div>
   </footer>
+
+  <button class="motion-toggle" id="motion-toggle" type="button" data-motion-toggle aria-pressed="false" aria-label="Pause animations">
+    <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+    <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 4 13 8-13 8Z"/></svg>
+  </button>
 </body>
 </html>

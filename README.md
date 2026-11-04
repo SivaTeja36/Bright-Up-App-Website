@@ -18,7 +18,7 @@ Then open <http://127.0.0.1:8137>. Opening `index.html` directly also works.
 |---|---|
 | `index.html` | All the page's words and structure |
 | `css/site.css` | The design: colours and fonts are named at the top |
-| `js/site.js` | Header colour, reveal animations, the office tabs and the video's play button |
+| `js/site.js` | All the motion: scroll story, reveals, sparks, tabs, phone menu and video. The page still works without it |
 | `assets/img/` | Logos and screenshots (WebP, in two sizes each) |
 | `assets/video/bright-up-tour.mp4` | The 48-second tour, with sound |
 | `assets/fonts/` | Inter and Plus Jakarta Sans, served from this site |
@@ -36,6 +36,10 @@ Every claim on the page comes from the real product, and the screens are the rea
 fictional sample data. Check the page when the app changes. For example, the Playground's languages and
 the Python track's numbers (280 programs, 195 quiz questions, 13 topics) are stated in the copy. The page
 has no invented statistics, customers or testimonials, and shouldn't gain any.
+
+## Motion
+
+Animations respect the device's reduced-motion setting, loops pause off screen, and visitors can pause them with the Pause animations button.
 
 ## Hosting
 
